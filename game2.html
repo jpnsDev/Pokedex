@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Battle</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-shadow: 0 0 10px cyan, 0 0 20px cyan;
+        }
+
+        #battlefield {
+            width: 600px;
+            height: 300px;
+            border: 3px solid cyan;
+            margin: auto;
+            position: relative;
+            background: url('images/campo.png') no-repeat center center;
+            background-size: cover;
+            box-shadow: 0 0 15px cyan;
+            border-radius: 15px;
+        }
+
+        .pokemon {
+            position: absolute;
+            width: 120px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #charizard {
+            bottom: 50px;
+            left: 50px;
+        }
+
+        #pikachu {
+            bottom: 50px;
+            right: 50px;
+        }
+
+        .health-bar-container {
+            position: absolute;
+            width: 120px;
+            height: 15px;
+            background-color: #222;
+            border: 2px solid white;
+            top: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 8px white;
+        }
+
+        .health-bar {
+            height: 100%;
+            background: linear-gradient(90deg, lime, yellow);
+            transition: width 0.3s ease-in-out;
+        }
+
+        #charizard-health-container {
+            left: 50px;
+        }
+
+        #pikachu-health-container {
+            right: 50px;
+        }
+
+        .attack {
+            position: absolute;
+            width: 50px;
+            display: none;
+        }
+
+        #thunderbolt {
+            right: 100px;
+            top: 100px;
+        }
+
+        #fireblast {
+            left: 100px;
+            top: 100px;
+        }
+
+        .btn {
+            background-color: transparent;
+            border: 2px solid cyan;
+            padding: 12px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            border-radius: 5px;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 0 10px cyan;
+        }
+
+        .btn:hover {
+            background-color: cyan;
+            color: black;
+            box-shadow: 0 0 20px cyan;
+        }
+
+        /* Notificação de fim de batalha */
+        #notification {
+            position: fixed;
+            top: 24%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
+            padding: 68px;
+            font-size: 30px;
+            border-radius: 10px;
+            display: none;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 0 15px rgb(255, 0, 0);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Pokémon Battle</h1>
+    <div id="battlefield">
+        <div id="charizard-health-container" class="health-bar-container">
+            <div id="charizard-health" class="health-bar"></div>
+        </div>
+        <div id="pikachu-health-container" class="health-bar-container">
+            <div id="pikachu-health" class="health-bar"></div>
+        </div>
+        <img id="charizard" class="pokemon" src="images/charizard.png" alt="Charizard">
+        <img id="pikachu" class="pokemon" src="images/pikachu.png" alt="Pikachu">
+        <img id="thunderbolt" class="attack" src="images/electric.png" alt="Choque do Trovão">
+        <img id="fireblast" class="attack" src="images/fire.png" alt="Lança-chamas">
+    </div>
+    <p>Escolha um ataque!</p>
+    <button class="btn" onclick="attack('thunderbolt')">⚡ Choque do Trovão</button>
+    <button class="btn" onclick="attack('fireblast')">🔥 Lança-chamas</button>
+    <br><br>
+    <button class="btn" onclick="window.location.href='index.html'">🔙 Voltar para Pokédex</button>
+
+    <!-- Notificação -->
+    <div id="notification"></div>
+
+    <script>
+        let pikachuHealth = 100;
+        let charizardHealth = 100;
+        let battleOver = false;
+
+        function attack(move) {
+            if (battleOver) return;
+
+            let playerDamage = Math.floor(Math.random() * 30) + 10;
+            let enemyDamage = Math.floor(Math.random() * 20) + 5;
+            
+            if (move === 'thunderbolt') {
+                document.getElementById('thunderbolt').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('thunderbolt').style.display = 'none';
+                    charizardHealth -= playerDamage;
+                    updateHealth();
+                    if (charizardHealth > 0) enemyAttack();
+                }, 500);
+            } else if (move === 'fireblast') {
+                document.getElementById('fireblast').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('fireblast').style.display = 'none';
+                    pikachuHealth -= enemyDamage;
+                    updateHealth();
+                }, 500);
+            }
+        }
+
+        function enemyAttack() {
+            if (battleOver) return;
+
+            let enemyMove = Math.random() > 0.5 ? 'fireblast' : 'thunderbolt';
+            attack(enemyMove);
+        }
+
+        function updateHealth() {
+            document.getElementById('pikachu-health').style.width = Math.max(pikachuHealth, 0) + '%';
+            document.getElementById('charizard-health').style.width = Math.max(charizardHealth, 0) + '%';
+
+            if (pikachuHealth <= 0 || charizardHealth <= 0) {
+                battleOver = true;
+                showNotification(
+                    pikachuHealth <= 0 
+                        ? 'Pikachu foi derrotado! Voltando para a Pokédex...' 
+                        : 'Charizard foi derrotado! Você venceu! Voltando para a Pokédex...'
+                );
+            }
+        }
+
+        function showNotification(message) {
+            let notification = document.getElementById('notification');
+            notification.innerHTML = message;
+            notification.style.display = 'block';
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
