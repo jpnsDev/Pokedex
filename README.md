@@ -35,7 +35,7 @@ O projeto está hospedado no GitHub Pages. Acesse pelo link:
 Sugestões e melhorias são bem-vindas! Sinta-se à vontade para abrir um pull request ou relatar issues.
 
 ## Autor
-👤 **Jotape2231**
+👤 **jpnsDev**
 
 ---
 *Feito com 💙 e muita animação!*
