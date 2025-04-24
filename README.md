@@ -18,7 +18,7 @@ Este é um projeto de Pokédex interativa com efeitos visuais dinâmicos e mini 
 
 ## Como Acessar
 O projeto está hospedado no GitHub Pages. Acesse pelo link:
-[**Pokédex Online**](https://jotape2231.github.io/Pokedex/)
+[**Pokédex Online**](https://jpnsdev.github.io/Pokedex/)
 
 ## Como Rodar Localmente
 1. Clone o repositório:
